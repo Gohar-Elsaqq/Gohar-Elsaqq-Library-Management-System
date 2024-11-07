@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,10 +58,13 @@ public class BookService {
 
     }
 
-    public BookDTO getBookById(Long id) {
-        return bookRepository.findById(id)
-                .map(bookMapper::toDTO)
-                .orElse(null);
+    public Optional<BookDTO> getBookById(Long id) {
+        if (bookRepository.findById(id).isPresent()) {
+            return bookRepository.findById(id)
+                    .map(bookMapper::toDTO);
+        } else {
+            throw new ResourceNotFoundException("Book with ID " + id + " not found.");
+        }
     }
 
     public String deleteBookById(Long id) throws Exception {
@@ -76,5 +80,4 @@ public class BookService {
             throw new Exception("An error occurred while deleting the book: " + exception.getMessage());
         }
     }
-
 }
