@@ -13,9 +13,14 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+//    @ExceptionHandler(ResourceNotFoundException.class)
+//    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
+//        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+//    }
+    //Not Found Record
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> handleNotFoundRecord(ResourceNotFoundException ex) {
+        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -40,7 +40,7 @@ public class BookController {
         return bookService.saveBook(bookDTO);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBookById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<?> deleteBookById(@PathVariable Long id) throws Exception {
         String result = bookService.deleteBookById(id);
         return ResponseEntity.ok(result);
     }
