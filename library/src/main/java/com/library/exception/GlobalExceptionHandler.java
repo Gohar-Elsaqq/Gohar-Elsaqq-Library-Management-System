@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.library.exception.ResourceNotFoundException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +22,9 @@ public class GlobalExceptionHandler {
     //Not Found Record
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<?> handleNotFoundRecord(ResourceNotFoundException ex) {
-        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+
+        ErrorResponse errorResponse= new ErrorResponse(ex.getLocalizedMessage(), Arrays.asList(ex.getMessage()));
+        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

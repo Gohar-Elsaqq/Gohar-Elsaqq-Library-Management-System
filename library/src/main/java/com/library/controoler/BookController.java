@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/books")
@@ -31,7 +32,7 @@ public class BookController {
         return bookService.getOnlyOfBooks();
     }
     @GetMapping("/{id}")
-    public BookDTO getBookById(@PathVariable Long id) {
+    public Optional<BookDTO> getBookById(@PathVariable Long id) {
         return bookService.getBookById(id);
     }
     @PutMapping()
@@ -44,4 +45,5 @@ public class BookController {
         String result = bookService.deleteBookById(id);
         return ResponseEntity.ok(result);
     }
+
 }
