@@ -22,22 +22,26 @@ public class BookService {
     private BorrowingRecordRepository borrowingRecordRepository;
     //add book
     public BookDTO saveBook(BookDTO bookDTO) {
-
-        if (bookDTO.getId() != null) {
-            var bookId = bookRepository.findById(bookDTO.getId());
-            if (bookId.isPresent()) {
-                var bookEntity = bookMapper.toEntity(bookDTO);
-                var updatedBook = bookRepository.save(bookEntity);
-                return bookMapper.toDTO(updatedBook);
+        try {
+            if (bookDTO.getId() != null) {
+                var bookId = bookRepository.findById(bookDTO.getId());
+                if (bookId.isPresent()) {
+                    var bookEntity = bookMapper.toEntity(bookDTO);
+                    var updatedBook = bookRepository.save(bookEntity);
+                    return bookMapper.toDTO(updatedBook);
+                } else {
+                    throw new ResourceNotFoundException("Book with ID " + bookDTO.getId() + " not found.");
+                }
             } else {
-                throw new ResourceNotFoundException("Book with ID " + bookDTO.getId() + " not found.");
+                var bookEntity = bookMapper.toEntity(bookDTO);
+                var newBook = bookRepository.save(bookEntity);
+                return bookMapper.toDTO(newBook);
             }
-        } else {
-            var bookEntity = bookMapper.toEntity(bookDTO);
-            var newBook = bookRepository.save(bookEntity);
-            return bookMapper.toDTO(newBook);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while saving the book: " + e.getMessage(), e);
         }
     }
+
     public List<BookDTO> getAllBooks() throws Exception {
         try {
             return bookRepository.findAll()

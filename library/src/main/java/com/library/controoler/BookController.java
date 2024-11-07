@@ -3,6 +3,7 @@ package com.library.controoler;
 import com.library.dto.BookDTO;
 import com.library.entity.Book;
 import com.library.service.BookService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class BookController {
     private BookService bookService;
     //add book
     @PostMapping
-    public BookDTO addBook(@RequestBody BookDTO bookDTO) throws Exception {
+    public BookDTO addBook(@Valid @RequestBody BookDTO bookDTO) throws Exception {
         return bookService.saveBook(bookDTO);
     }
 
@@ -34,8 +35,7 @@ public class BookController {
         return bookService.getBookById(id);
     }
     @PutMapping()
-    public BookDTO updateBook( @RequestBody BookDTO bookDTO)  {
-//            bookDTO.setId(id);
+    public BookDTO updateBook(@Valid @RequestBody BookDTO bookDTO)  {
         return bookService.saveBook(bookDTO);
     }
     @DeleteMapping("/{id}")
