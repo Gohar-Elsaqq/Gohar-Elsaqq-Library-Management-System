@@ -4,6 +4,7 @@ import com.library.dto.BorrowingRecordDTO;
 import com.library.entity.BorrowingRecord;
 import com.library.exception.ResourceNotFoundException;
 import com.library.service.BorrowingService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class BorrowingController {
     private BorrowingService borrowingService;
 
     @PostMapping("/book/{bookId}/patron/{patronId}")
-    public BorrowingRecordDTO borrowBook(@PathVariable Long bookId, @PathVariable Long patronId) {
+    public BorrowingRecordDTO borrowBook(@Valid @PathVariable Long bookId, @PathVariable Long patronId) {
         return borrowingService.borrowBook(bookId, patronId);
     }
     @PutMapping("/return/{bookId}/patron/{patronId}")

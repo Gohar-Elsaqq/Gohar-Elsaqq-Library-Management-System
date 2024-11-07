@@ -74,8 +74,8 @@ public class PatronService {
             }
         } else {
             var patron = patronMapper.toEntity(patronDTO);
-            if (patron.getName() == null || patron.getName().trim().isEmpty() || patron.getName().length() <= 8) {
-                throw new Exception("Name is missing or too short (should be more than 4 characters) in Patron data.");
+            if (patron.getName() == null || patron.getName().trim().isEmpty() || patron.getName().length() <= 7) {
+                throw new Exception("Name is missing or too short (should be more than 7 characters) in Patron data.");
             }
 
 

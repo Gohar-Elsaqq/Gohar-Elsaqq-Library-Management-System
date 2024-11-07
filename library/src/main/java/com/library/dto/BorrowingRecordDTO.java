@@ -1,5 +1,6 @@
 package com.library.dto;
 
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +9,10 @@ import java.time.LocalDate;
 @Setter
 public class BorrowingRecordDTO {
     private Long id;
+    @NotBlank
+    @PastOrPresent(message ="The date of the borrowing must be in the past or today.")
     private LocalDate borrowDate;
+    @FutureOrPresent(message = "The return date must be in the future or today.")
     private LocalDate returnDate;
     private PatronDTO patron;
 }

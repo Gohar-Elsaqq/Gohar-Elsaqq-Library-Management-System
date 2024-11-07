@@ -1,7 +1,9 @@
 package com.library.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,9 +12,10 @@ import lombok.Setter;
 public class PatronDTO {
     private Long id;
     @NotNull(message = "Name is required ")
-    private String name;
-    @NotNull(message = "ContactInformation is required ")
     @NotBlank
+    @Size(min = 7, max = 250, message = "Name must be between 7 and 250 characters")
+    private String name;
+    @Valid
     private ContactInfoDTO contactInformation;
 
 }

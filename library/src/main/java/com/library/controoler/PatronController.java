@@ -3,6 +3,7 @@ package com.library.controoler;
 import com.library.dto.BookDTO;
 import com.library.dto.PatronDTO;
 import com.library.service.PatronService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +26,11 @@ public class PatronController {
         return patronService.getById(id);
     }
     @PostMapping
-    private PatronDTO save (@RequestBody PatronDTO patronDTO) throws Exception {
+    private PatronDTO save (@Valid @RequestBody PatronDTO patronDTO) throws Exception {
         return patronService.save(patronDTO);
     }
     @PutMapping()
-    public PatronDTO updatePatron(@RequestBody PatronDTO patronDTO) throws Exception {
+    public PatronDTO updatePatron(@Valid @RequestBody PatronDTO patronDTO) throws Exception {
 //            bookDTO.setId(id);
         return patronService.save(patronDTO);
     }

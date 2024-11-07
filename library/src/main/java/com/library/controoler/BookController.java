@@ -36,6 +36,7 @@ public class BookController {
     }
     @PutMapping()
     public BookDTO updateBook(@Valid @RequestBody BookDTO bookDTO)  {
+//            bookDTO.setId(id);
         return bookService.saveBook(bookDTO);
     }
     @DeleteMapping("/{id}")
