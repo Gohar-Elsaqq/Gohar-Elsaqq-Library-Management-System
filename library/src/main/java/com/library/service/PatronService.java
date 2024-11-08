@@ -3,6 +3,7 @@ package com.library.service;
 import com.library.dto.BookDTO;
 import com.library.dto.PatronDTO;
 import com.library.entity.Patron;
+import com.library.exception.DaplicateRecoredException;
 import com.library.exception.ResourceNotFoundException;
 import com.library.mapper.PatronMapper;
 import com.library.repository.BookRepository;
@@ -10,7 +11,6 @@ import com.library.repository.BorrowingRecordRepository;
 import com.library.repository.PatronRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +25,7 @@ public class PatronService {
     private BorrowingRecordRepository borrowingRecordRepository;
     @Autowired
     private BookRepository bookRepository;
+
     public List<PatronDTO> getAllPatron() throws Exception {
         try {
             return patronRepository.findAll()
@@ -61,6 +62,7 @@ public class PatronService {
                 .orElseThrow(() -> new ResourceNotFoundException("Patron with ID " + id + " not found."));
     }
 
+
     public PatronDTO save(PatronDTO patronDTO) throws Exception {
 
         if (patronDTO.getId() != null) {
@@ -73,6 +75,9 @@ public class PatronService {
                 throw new ResourceNotFoundException("Book with ID " + patronDTO.getId() + " not found.");
             }
         } else {
+            if(patronRepository.findByEmail(patronDTO.getContactInformation().getEmail()).isPresent()){
+                throw new DaplicateRecoredException("Email already exists");
+            }
             var patron = patronMapper.toEntity(patronDTO);
             if (patron.getName() == null || patron.getName().trim().isEmpty() || patron.getName().length() <= 7) {
                 throw new Exception("Name is missing or too short (should be more than 7 characters) in Patron data.");
@@ -110,7 +115,5 @@ public class PatronService {
         } catch (Exception exception) {
             throw new Exception("An error occurred while deleting the book: " + exception.getMessage());
         }
-
     }
-
 }

@@ -26,8 +26,6 @@ public class LoggingAspect {
         Object returnValue =joinPoint.proceed();
         logger.info(stringBuilder.append(System.currentTimeMillis()-startTime).append(" MS.").toString());
         return returnValue;
-
-
     }
 
 }

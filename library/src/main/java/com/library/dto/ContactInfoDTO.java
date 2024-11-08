@@ -8,7 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ContactInfoDTO {
-    @Email(message = "email is required")
+    @Email
+    @NotNull(message = "Email is required ")
     private String email;
     @NotNull(message = "Address is required ")
     private String address;
