@@ -82,6 +82,7 @@ public class PatronService {
             if (patron.getName() == null || patron.getName().trim().isEmpty() || patron.getName().length() <= 7) {
                 throw new Exception("Name is missing or too short (should be more than 7 characters) in Patron data.");
             }
+
             if (patron.getContactInformation() == null) {
                 throw new Exception("Contact Information is missing.");
             } else {

@@ -8,6 +8,7 @@ import com.library.repository.BookRepository;
 import com.library.repository.BorrowingRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +48,7 @@ public class BookService {
         return bookRepository.findAllBooks();
 
     }
+    @Transactional
     public Optional<BookDTO> getBookById(Long id) {
         if (bookRepository.findById(id).isPresent()) {
             return bookRepository.findById(id)
