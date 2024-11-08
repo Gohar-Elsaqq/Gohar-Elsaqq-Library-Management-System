@@ -40,4 +40,9 @@ public class PatronController {
 //            bookDTO.setId(id);
         return patronService.save(patronDTO);
     }
+    @GetMapping("/Phone")
+    private PatronDTO getById(@RequestParam String phone){
+
+        return patronService.getByPhone(phone);
+    }
 }

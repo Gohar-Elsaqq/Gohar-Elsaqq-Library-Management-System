@@ -114,4 +114,10 @@ public class PatronService {
             throw new Exception("An error occurred while deleting the book: " + exception.getMessage());
         }
     }
+    // GEY PATRON BY PHONE
+    public PatronDTO getByPhone(String phone) throws ResourceNotFoundException {
+        return patronRepository.findByPhone(phone)
+                .map(patronMapper::toDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Patron with phone " + phone + " not found."));
+    }
 }
