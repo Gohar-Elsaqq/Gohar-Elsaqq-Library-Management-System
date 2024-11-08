@@ -11,8 +11,9 @@ import java.util.List;
 public class ErrorResponse {
     private String massage;
     private Boolean success;
-    private LocalDateTime dateTime;
     private List<String> details;
+    private LocalDateTime dateTime;
+
 
     public ErrorResponse() {
     }
