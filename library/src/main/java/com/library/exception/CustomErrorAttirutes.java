@@ -13,18 +13,20 @@ import java.util.Map;
 @Component
 public class CustomErrorAttirutes extends DefaultErrorAttributes {
 
+    //Custom Error Attirutes
     @Override
     public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions errorAttributeOptions) {
         Map<String, Object> errorAttributes = super.getErrorAttributes(webRequest, errorAttributeOptions);
         errorAttributes.put("locale",webRequest.getLocale().toString());
-        errorAttributes.put("success",Boolean.FALSE);
-        errorAttributes.put("exception",errorAttributes.get("message"));
         errorAttributes.put("status",errorAttributes.get("error"));
+        errorAttributes.put("exception",errorAttributes.get("message"));
+        errorAttributes.put("success",Boolean.FALSE);
         errorAttributes.put("details", Arrays.asList(errorAttributes.get("message")));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         errorAttributes.put("timestamp", LocalDateTime.now().format(formatter));
         errorAttributes.remove("error");
         errorAttributes.remove("path");
+        //remove trace
         errorAttributes.remove("trace");
         return errorAttributes;
     }
