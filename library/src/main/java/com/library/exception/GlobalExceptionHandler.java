@@ -25,12 +25,7 @@ public class GlobalExceptionHandler {
         return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
     //DaplicateRecoredException
-    @ExceptionHandler(DaplicateRecoredException.class)
-    public ResponseEntity<?> daplicateRecoredException(DaplicateRecoredException ex) {
 
-        ErrorResponse errorResponse= new ErrorResponse(ex.getLocalizedMessage(), Arrays.asList(ex.getMessage()));
-        return  ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
-    }
     //MethodArgumentNotValidException
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -43,6 +38,12 @@ public class GlobalExceptionHandler {
 
         ErrorResponse errorResponse = new ErrorResponse(ex.getLocalizedMessage(), Arrays.asList(ex.getMessage()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+    @ExceptionHandler(DaplicateRecoredException.class)
+    public ResponseEntity<?> daplicateRecoredException(DaplicateRecoredException ex) {
+
+        ErrorResponse errorResponse= new ErrorResponse(ex.getLocalizedMessage(), Arrays.asList(ex.getMessage()));
+        return  ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
 }
