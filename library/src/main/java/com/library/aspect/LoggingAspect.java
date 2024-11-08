@@ -14,7 +14,9 @@ public class LoggingAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
 
-    // Pointcut for BookService methods
+
+    // Execution(* com.library.service..*(..)) matches any method in the service package and any number of arguments.
+    // The (..) is a wildcard that matches any number of arguments.
     @Around("execution(* com.library.service..*(..))")
     public Object serviceMethods(ProceedingJoinPoint joinPoint) throws Throwable {
         logger.info(">>>>>>>>>LoggingAspect<<<<<<<<<<");
@@ -27,5 +29,4 @@ public class LoggingAspect {
         logger.info(stringBuilder.append(System.currentTimeMillis()-startTime).append(" MS.").toString());
         return returnValue;
     }
-
 }
