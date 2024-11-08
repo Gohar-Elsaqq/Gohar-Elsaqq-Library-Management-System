@@ -22,11 +22,6 @@ public class BookController {
         return bookService.saveBook(bookDTO);
     }
 
-
-    @GetMapping
-    public List<BookDTO> getAllBooks() throws Exception {
-        return bookService.getAllBooks();
-    }
     @GetMapping("/all")
     public List<Book> getOnlyOfBooks() {
         return bookService.getOnlyOfBooks();
@@ -44,6 +39,10 @@ public class BookController {
     public ResponseEntity<?> deleteBookById(@PathVariable Long id) throws Exception {
         String result = bookService.deleteBookById(id);
         return ResponseEntity.ok(result);
+    }
+    @GetMapping
+    public List<BookDTO> getAllBooks() throws Exception {
+        return bookService.getAllBooks();
     }
 
 }

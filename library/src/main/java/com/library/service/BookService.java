@@ -43,21 +43,10 @@ public class BookService {
         }
     }
 
-    public List<BookDTO> getAllBooks() throws Exception {
-        try {
-            return bookRepository.findAll()
-                    .stream()
-                    .map(bookMapper::toDTO)
-                    .collect(Collectors.toList());
-        } catch (Exception exception) {
-            throw new Exception(exception.getMessage());
-        }
-    }
     public List<Book> getOnlyOfBooks() {
         return bookRepository.findAllBooks();
 
     }
-
     public Optional<BookDTO> getBookById(Long id) {
         if (bookRepository.findById(id).isPresent()) {
             return bookRepository.findById(id)
@@ -78,6 +67,16 @@ public class BookService {
             }
         } catch (Exception exception) {
             throw new Exception("An error occurred while deleting the book: " + exception.getMessage());
+        }
+    }
+    public List<BookDTO> getAllBooks() throws Exception {
+        try {
+            return bookRepository.findAll()
+                    .stream()
+                    .map(bookMapper::toDTO)
+                    .collect(Collectors.toList());
+        } catch (Exception exception) {
+            throw new Exception(exception.getMessage());
         }
     }
 }

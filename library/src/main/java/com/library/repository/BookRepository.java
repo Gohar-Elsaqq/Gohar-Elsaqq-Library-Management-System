@@ -12,11 +12,10 @@ import java.util.List;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book,Long> {
-
-    @Query(value = "SELECT * FROM librarymanagementsystem.books", nativeQuery = true)
-    List<Book> findAllBooks();
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM librarymanagementsystem.books WHERE id =:id", nativeQuery = true)
     void deleteById(@Param("id") Long id);
+    @Query(value = "SELECT * FROM librarymanagementsystem.books", nativeQuery = true)
+    List<Book> findAllBooks();
 }
