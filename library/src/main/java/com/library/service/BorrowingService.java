@@ -28,7 +28,21 @@ public class BorrowingService {
     private BookRepository bookRepository;
     @Autowired
     private BorrowingRecordMapper borrowingRecordMapper;
+
+    public BorrowingRecordDTO returnBook(Long bookId, Long patronId) {
+        BorrowingRecord borrowingRecord = borrowingRecordRepository.findByBookIdAndPatronIdAndReturnDateIsNull(bookId, patronId)
+                .orElseThrow(() -> new ResourceNotFoundException("No active borrowing record found for this book and patron"));
+
+        borrowingRecord.setReturnDate(LocalDate.now());
+
+        // Save the updated borrowing record
+        BorrowingRecord updatedBorrowingRecord = borrowingRecordRepository.save(borrowingRecord);
+
+        return borrowingRecordMapper.toDTO(updatedBorrowingRecord);
+    }
+
     public BorrowingRecordDTO borrowBook(Long bookId, Long patronId) {
+
 
         Optional<BorrowingRecord> existingRecord = borrowingRecordRepository.findByPatronAndBook(patronId, bookId);
         if (existingRecord.isPresent()) {
@@ -50,15 +64,5 @@ public class BorrowingService {
         return borrowingRecordMapper.toDTO(savedBorrowingRecord);
     }
 
-    public BorrowingRecordDTO returnBook(Long bookId, Long patronId) {
-        BorrowingRecord borrowingRecord = borrowingRecordRepository.findByBookIdAndPatronIdAndReturnDateIsNull(bookId, patronId)
-                .orElseThrow(() -> new ResourceNotFoundException("No active borrowing record found for this book and patron"));
 
-        borrowingRecord.setReturnDate(LocalDate.now());
-
-        // Save the updated borrowing record
-        BorrowingRecord updatedBorrowingRecord = borrowingRecordRepository.save(borrowingRecord);
-
-        return borrowingRecordMapper.toDTO(updatedBorrowingRecord);
-    }
 }

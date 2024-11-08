@@ -23,11 +23,13 @@ public class BorrowingRecord {
     private LocalDate borrowDate;
     private LocalDate returnDate;
 
-    @ManyToOne
-    @JoinColumn(name = "book_id")
-    private Book book;
 
     @ManyToOne
     @JoinColumn(name = "patron_id")
     private Patron patron;
+
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
+
 }

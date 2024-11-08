@@ -17,12 +17,13 @@ public class BorrowingController {
     @Autowired
     private BorrowingService borrowingService;
 
-    @PostMapping("/book/{bookId}/patron/{patronId}")
-    public BorrowingRecordDTO borrowBook(@Valid @PathVariable Long bookId, @PathVariable Long patronId) {
-        return borrowingService.borrowBook(bookId, patronId);
-    }
     @PutMapping("/return/{bookId}/patron/{patronId}")
     public BorrowingRecordDTO returnBook(@PathVariable Long bookId, @PathVariable Long patronId) {
         return borrowingService.returnBook(bookId, patronId);
     }
+    @PostMapping("/book/{bookId}/patron/{patronId}")
+    public BorrowingRecordDTO borrowBook(@Valid @PathVariable Long bookId, @PathVariable Long patronId) {
+        return borrowingService.borrowBook(bookId, patronId);
+    }
+
 }
