@@ -10,8 +10,8 @@ import org.mapstruct.Mapping;
 public interface PatronMapper {
 
     PatronMapper INSTANCE = Mappers.getMapper(PatronMapper.class);
-
+    Patron toEntity(PatronDTO patronDTO);
     PatronDTO toDTO(Patron patron);
 
-    Patron toEntity(PatronDTO patronDTO);
+
 }

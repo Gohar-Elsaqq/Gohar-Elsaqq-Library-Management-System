@@ -29,14 +29,15 @@ public class PatronController {
     private PatronDTO save (@Valid @RequestBody PatronDTO patronDTO) throws Exception {
         return patronService.save(patronDTO);
     }
-    @PutMapping()
-    public PatronDTO updatePatron(@Valid @RequestBody PatronDTO patronDTO) throws Exception {
-//            bookDTO.setId(id);
-        return patronService.save(patronDTO);
-    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteBookById(@PathVariable Long id) throws Exception {
         String result = patronService.deleteById(id);
         return ResponseEntity.ok(result);
+    }
+    @PutMapping()
+    public PatronDTO updatePatron(@Valid @RequestBody PatronDTO patronDTO) throws Exception {
+//            bookDTO.setId(id);
+        return patronService.save(patronDTO);
     }
 }

@@ -11,11 +11,14 @@ import lombok.Setter;
 @Setter
 public class PatronDTO {
     private Long id;
+
+    @Valid
+    private ContactInfoDTO contactInformation;
+
     @NotNull(message = "Name is required ")
     @NotBlank
     @Size(min = 7, max = 250, message = "Name must be between 7 and 250 characters")
     private String name;
-    @Valid
-    private ContactInfoDTO contactInformation;
+
 
 }

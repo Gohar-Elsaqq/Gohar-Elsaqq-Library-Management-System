@@ -82,8 +82,6 @@ public class PatronService {
             if (patron.getName() == null || patron.getName().trim().isEmpty() || patron.getName().length() <= 7) {
                 throw new Exception("Name is missing or too short (should be more than 7 characters) in Patron data.");
             }
-
-
             if (patron.getContactInformation() == null) {
                 throw new Exception("Contact Information is missing.");
             } else {
@@ -91,12 +89,11 @@ public class PatronService {
                     throw new Exception("Address is missing in Contact Information.");
                 }
 
-                if (patron.getContactInformation().getPhone() == null || patron.getContactInformation().getPhone().trim().isEmpty()) {
-                    throw new Exception("Phone is missing in Contact Information.");
-                }
-
                 if (patron.getContactInformation().getEmail() == null || patron.getContactInformation().getEmail().trim().isEmpty()) {
                     throw new Exception("Email is missing in Contact Information.");
+                }
+                if (patron.getContactInformation().getPhone() == null || patron.getContactInformation().getPhone().trim().isEmpty()) {
+                    throw new Exception("Phone is missing in Contact Information.");
                 }
             }
                 var newPatron = patronRepository.save(patron);
