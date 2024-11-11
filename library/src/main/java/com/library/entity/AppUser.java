@@ -20,14 +20,14 @@ public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotNull
-    private String username;
-
-    @NotNull
+    private String userName;
     private String password;
     private String email;
     private String fullName;
+
+    public AppUser(Long id) {
+        this.id = id;
+    }
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
