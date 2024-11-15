@@ -26,6 +26,10 @@ public class BookController {
     public List<Book> getOnlyOfBooks() {
         return bookService.getOnlyOfBooks();
     }
+    @GetMapping("/countBooksByTitle/{title}")
+    public Optional<Long>  countBooksByTitle(@PathVariable String title) {
+        return bookService.countBooksByTitle(title);
+    }
     @GetMapping("/{id}")
     public Optional<BookDTO> getBookById(@PathVariable Long id) {
         return bookService.getBookById(id);

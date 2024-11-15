@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book,Long> {
@@ -18,4 +19,7 @@ public interface BookRepository extends JpaRepository<Book,Long> {
     void deleteById(@Param("id") Long id);
     @Query(value = "SELECT * FROM librarymanagementsystem.books", nativeQuery = true)
     List<Book> findAllBooks();
+
+    @Query("SELECT COUNT(b) FROM Book b WHERE b.title = :title")
+    Optional<Long>  countBooksByTitle(@Param("title") String title);
 }

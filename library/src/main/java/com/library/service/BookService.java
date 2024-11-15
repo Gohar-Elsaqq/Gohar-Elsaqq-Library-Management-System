@@ -48,6 +48,17 @@ public class BookService {
         return bookRepository.findAllBooks();
 
     }
+
+    public Optional<Long> countBooksByTitle(String title) {
+        if(title.isEmpty()){
+            throw  new  ResourceNotFoundException("please enter title");
+        }
+        if(bookRepository.countBooksByTitle(title).isPresent()){
+            return bookRepository.countBooksByTitle(title);
+        }
+
+        return null;
+    }
     @Transactional
     public Optional<BookDTO> getBookById(Long id) {
         if (bookRepository.findById(id).isPresent()) {
