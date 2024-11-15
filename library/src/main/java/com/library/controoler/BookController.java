@@ -45,7 +45,7 @@ public class BookController {
         return ResponseEntity.ok(result);
     }
     @GetMapping
-    public List<BookDTO> getAllBooks() throws Exception {
+    public ResponseEntity<?> getAllBooks() throws Exception {
         return bookService.getAllBooks();
     }
 

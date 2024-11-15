@@ -17,7 +17,7 @@ public class PatronController {
     private PatronService patronService;
 
     @GetMapping
-    public List<PatronDTO> getAllPatron() throws Exception {
+    public ResponseEntity<?> getAllPatron() throws Exception {
         return patronService.getAllPatron();
     }
 
@@ -31,9 +31,9 @@ public class PatronController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBookById(@PathVariable Long id) throws Exception {
-        String result = patronService.deleteById(id);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<?> deleteBookById(@PathVariable Long id) throws Exception {
+
+        return patronService.deleteById(id);
     }
     @PutMapping()
     public PatronDTO updatePatron(@Valid @RequestBody PatronDTO patronDTO) throws Exception {

@@ -9,8 +9,13 @@ import com.library.mapper.PatronMapper;
 import com.library.repository.BookRepository;
 import com.library.repository.BorrowingRecordRepository;
 import com.library.repository.PatronRepository;
+import com.library.response.SuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,33 +31,37 @@ public class PatronService {
     @Autowired
     private BookRepository bookRepository;
 
-    public List<PatronDTO> getAllPatron() throws Exception {
-        try {
-            return patronRepository.findAll()
-                    .stream()
-                    .map(patron -> {
-                        PatronDTO patronDTO = patronMapper.toDTO(patron);
+    public ResponseEntity<?> getAllPatron() throws Exception {
+        List<PatronDTO> patronDTOS = patronRepository.findAll()
+                .stream()
+                .map(patron -> {
+                    PatronDTO patronDTO = patronMapper.toDTO(patron);
 
-                        if (patronDTO.getContactInformation() != null) {
-                            if (patronDTO.getContactInformation().getAddress() == null) {
-                                patronDTO.getContactInformation().setAddress("");
-                            }
-                            if (patronDTO.getContactInformation().getPhone() == null) {
-                                patronDTO.getContactInformation().setPhone("");
-                            }
-                            if (patronDTO.getContactInformation().getEmail() == null) {
-                                patronDTO.getContactInformation().setEmail("");
-                            }
-                            if (patronDTO.getContactInformation().getBin() == null) {
-                                patronDTO.getContactInformation().setBin("");
-                            }
+                    if (patronDTO.getContactInformation() != null) {
+                        if (patronDTO.getContactInformation().getAddress() == null) {
+                            patronDTO.getContactInformation().setAddress("");
                         }
-                        return patronDTO;
-                    })
+                        if (patronDTO.getContactInformation().getPhone() == null) {
+                            patronDTO.getContactInformation().setPhone("");
+                        }
+                        if (patronDTO.getContactInformation().getEmail() == null) {
+                            patronDTO.getContactInformation().setEmail("");
+                        }
+                        if (patronDTO.getContactInformation().getBin() == null) {
+                            patronDTO.getContactInformation().setBin("");
+                        }
+                    }
+                    return patronDTO;
+                })
                     .collect(Collectors.toList());
-        } catch (Exception exception) {
-            throw new Exception(exception.getMessage());
+        if (patronDTOS.isEmpty()) {
+            throw new ResourceNotFoundException("Books not found.");
         }
+        SuccessResponse<List<PatronDTO>> successResponse = new SuccessResponse<>(
+                "patron return data.",
+                patronDTOS
+        );
+        return new ResponseEntity<>(successResponse, HttpStatus.OK);
     }
 
 
@@ -101,18 +110,19 @@ public class PatronService {
                 return patronMapper.toDTO(newPatron);
             }
         }
-    public String deleteById(Long id) throws Exception {
-        try {
+    public ResponseEntity<?> deleteById(Long id) throws Exception {
             if (patronRepository.existsById(id)) {
                 borrowingRecordRepository.deleteByPatronId(id);
                 patronRepository.deleteById(id);
-                return "Book with ID " + id + " deleted successfully.";
+//                List<String> details = new ArrayList<>();
+//                details.add("Patron with ID " + id + " has been deleted.");
+//                details.add("No associated borrowing records left for this patron.");
+                SuccessResponse<?> successResponse = new SuccessResponse<>(
+                        "deleted successfully.","Book with ID " + id + " deleted successfully.");
+                return new ResponseEntity<>(successResponse, HttpStatus.OK);
             } else {
                 throw new ResourceNotFoundException("Book with ID " + id + " not found.");
             }
-        } catch (Exception exception) {
-            throw new Exception("An error occurred while deleting the book: " + exception.getMessage());
-        }
     }
     // GEY PATRON BY PHONE
     public PatronDTO getByPhone(String phone) throws ResourceNotFoundException {

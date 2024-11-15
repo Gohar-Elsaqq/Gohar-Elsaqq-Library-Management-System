@@ -8,7 +8,4 @@ public class DaplicateRecoredException extends RuntimeException{
         super(message);
     }
 
-    public DaplicateRecoredException(Throwable cause) {
-        super(cause);
-    }
 }

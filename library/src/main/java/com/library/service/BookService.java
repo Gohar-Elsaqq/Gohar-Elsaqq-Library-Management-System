@@ -6,7 +6,10 @@ import com.library.exception.ResourceNotFoundException;
 import com.library.mapper.BookMapper;
 import com.library.repository.BookRepository;
 import com.library.repository.BorrowingRecordRepository;
+import com.library.response.SuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,7 +73,7 @@ public class BookService {
     }
 
     public String deleteBookById(Long id) throws Exception {
-        try {
+
             if (bookRepository.existsById(id)) {
                 borrowingRecordRepository.deleteByBookId(id);
                 bookRepository.deleteById(id);
@@ -78,18 +81,19 @@ public class BookService {
             } else {
                 throw new ResourceNotFoundException("Book with ID " + id + " not found.");
             }
-        } catch (Exception exception) {
-            throw new Exception("An error occurred while deleting the book: " + exception.getMessage());
-        }
     }
-    public List<BookDTO> getAllBooks() throws Exception {
-        try {
-            return bookRepository.findAll()
-                    .stream()
-                    .map(bookMapper::toDTO)
-                    .collect(Collectors.toList());
-        } catch (Exception exception) {
-            throw new Exception(exception.getMessage());
+    public ResponseEntity<?> getAllBooks() throws Exception {
+        List<BookDTO> books = bookRepository.findAll()
+                .stream()
+                .map(bookMapper::toDTO)
+                .collect(Collectors.toList());
+        if (books.isEmpty()) {
+            throw new ResourceNotFoundException("Books not found.");
         }
+        SuccessResponse<List<BookDTO>> successResponse = new SuccessResponse<>(
+                "Books return data.",
+                books
+        );
+        return new ResponseEntity<>(successResponse, HttpStatus.OK);
     }
 }

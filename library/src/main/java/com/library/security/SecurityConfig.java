@@ -26,12 +26,13 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthResponse jwtAuthResponse;
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthResponse))
+//                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthResponse))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .anyRequest().authenticated()
