@@ -30,10 +30,11 @@ public class JwtTokenUtils {
         this.refreshTokenValidity = refreshTokenValidity;
     }
 
-    public static String generateToken(String userName, String tokenId, boolean isRefresh) {
+    public static String generateToken(String userName, String tokenId, boolean isRefresh, String role) {
         if (tokenSecret.length() < 64) {
             throw new IllegalArgumentException("The tokenSecret must be at least 64 characters for HS512.");
         }
+
         Key key = new SecretKeySpec(tokenSecret.getBytes(), SignatureAlgorithm.HS512.getJcaName());
 
         return Jwts.builder()
@@ -43,6 +44,7 @@ public class JwtTokenUtils {
                 .setIssuer("app")
                 .setExpiration(colcTokenExpiration(isRefresh))
                 .claim("created", Calendar.getInstance().getTime())
+                .claim("role", role)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }

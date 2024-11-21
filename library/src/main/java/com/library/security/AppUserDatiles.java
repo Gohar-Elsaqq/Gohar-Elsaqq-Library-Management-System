@@ -18,18 +18,21 @@ public class AppUserDatiles implements UserDetails {
     private String username;
     private String password;
     private String fullName;
-    List<GrantedAuthority> grantedAuthorities;
+    private List<GrantedAuthority> grantedAuthorities;
+
     public AppUserDatiles() {
         super();
     }
+
     public AppUserDatiles(AppUser appUser) {
         super();
         this.id = appUser.getId();
         this.username = appUser.getUserName();
-        this.password =  appUser.getPassword();
+        this.password = appUser.getPassword();
         this.fullName = appUser.getFullName();
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        if(!appUser.getRoles().isEmpty()){
+        // Initialize grantedAuthorities properly
+        this.grantedAuthorities = new ArrayList<>();
+        if (appUser.getRoles() != null && !appUser.getRoles().isEmpty()) {
             appUser.getRoles().forEach(role -> {
                 grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
             });
@@ -53,13 +56,12 @@ public class AppUserDatiles implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
         return true;
-//        return UserDetails.super.isAccountNonLocked();
     }
 
     @Override

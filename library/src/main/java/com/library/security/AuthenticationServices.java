@@ -12,10 +12,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.net.InetAddress;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -43,9 +45,13 @@ public class AuthenticationServices {
 
         AppUserDatiles appUserDatiles = (AppUserDatiles) authentication.getPrincipal();
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
+        List<GrantedAuthority> grantedAuthorities;
+        String role = appUserDatiles.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst()
+                .orElse("ROLE_USER");
         //Creation of token after validation
-        TokenInfo tokenInfo = createLoginToken(userName, appUserDatiles.getId());
+        TokenInfo tokenInfo = createLoginToken(userName, appUserDatiles.getId(),role);
 
         //Check token validity
         if (jwtTokenUtils.isTokenExpired(tokenInfo.getAccessToken())) {
@@ -59,9 +65,9 @@ public class AuthenticationServices {
                         .refreshToken(tokenInfo.getRefreshToken())
                         .build());
     }
-    public TokenInfo createLoginToken(String userName,Long userId ){
+    public TokenInfo createLoginToken(String userName, Long userId, String role) {
         String userAgent = httpRequest.getHeader(HttpHeaders.USER_AGENT);
-        InetAddress ip=null;
+        InetAddress ip = null;
         try {
             ip = InetAddress.getLocalHost();
         } catch (Exception e) {
@@ -69,17 +75,19 @@ public class AuthenticationServices {
         }
         String accessTokenId = UUID.randomUUID().toString();
         log.info("Access token create " + accessTokenId);
-        String accessTken =JwtTokenUtils.generateToken(userName,accessTokenId,false);
-        log.info("Access token create " + accessTokenId);
+        String accessToken = JwtTokenUtils.generateToken(userName, accessTokenId, false, role);
+        log.info("Access token created " + accessTokenId);
         String refreshTokenId = UUID.randomUUID().toString();
         log.info("Refresh token create " + refreshTokenId);
-        String refreshToken = JwtTokenUtils.generateToken(userName, refreshTokenId,true);
-        log.info("Refresh token create " + refreshTokenId);
-        TokenInfo tokenInfo = new TokenInfo(accessTken,refreshToken);
+        String refreshToken = JwtTokenUtils.generateToken(userName, refreshTokenId, true, role);
+        log.info("Refresh token created " + refreshTokenId);
+
+        TokenInfo tokenInfo = new TokenInfo(accessToken, refreshToken);
         tokenInfo.setAppUser(new AppUser(userId));
         tokenInfo.setUserAgentText(userAgent);
         tokenInfo.setLocalIpAddress(ip.getHostAddress());
         tokenInfo.setRemoteIpAddress(httpRequest.getRemoteAddr());
         return tokenInfoServices.saveTokenInfo(tokenInfo);
     }
+
 }
