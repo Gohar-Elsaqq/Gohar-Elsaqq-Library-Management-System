@@ -16,6 +16,8 @@ public class JwtAuthResponse implements AuthenticationEntryPoint , Serializable 
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          org.springframework.security.core.AuthenticationException authException)
             throws IOException, ServletException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Invalid or missing token");
+        response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write("{\"error\": \"Please login in again\"}");
     }
 }

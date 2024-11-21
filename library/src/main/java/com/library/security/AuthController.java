@@ -1,5 +1,6 @@
 package com.library.security;
 
+import com.library.response.SuccessResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,8 +14,10 @@ public class AuthController {
     @Autowired
     private AuthenticationServices authenticationServices;
     @PostMapping("/login")
-    public JwtTokenResponse login(@Valid @RequestBody LoginRequest loginRequest){
-        JwtTokenResponse jwtAuthResponse= authenticationServices.login(loginRequest.getUserName(),loginRequest.getPassword());
-        return jwtAuthResponse;
+    public SuccessResponse<JwtTokenResponse> login(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
+        JwtTokenResponse jwtAuthResponse = authenticationServices.login(loginRequest.getUserName(), loginRequest.getPassword()).getDetails();
+
+        return new SuccessResponse<>("Authentication successful", jwtAuthResponse);
     }
+
 }

@@ -18,9 +18,6 @@ import static io.jsonwebtoken.Jwts.builder;
 @Log4j2
 @Component
 public class JwtTokenUtils {
-    // Implement JWT token generation and validation logic here
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-
     private static String tokenSecret;
     private static Long accessTokenValidity;
     private static Long refreshTokenValidity;
@@ -93,7 +90,7 @@ public class JwtTokenUtils {
 //            return false;
 //        }
 //    }
-    public boolean validateToken(String token , HttpServletRequest httpServletRequest) {
+    public boolean validateToken(String token) {
         try {
             Key key = new SecretKeySpec(tokenSecret.getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS512.getJcaName());
             Jwts.parser()

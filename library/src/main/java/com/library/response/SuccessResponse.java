@@ -3,11 +3,13 @@ package com.library.response;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class SuccessResponse<T> {
+public class SuccessResponse<T> implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String message;
     private Boolean success;
     private T details;

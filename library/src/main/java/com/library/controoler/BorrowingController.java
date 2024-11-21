@@ -1,13 +1,9 @@
 package com.library.controoler;
 
 import com.library.dto.BorrowingRecordDTO;
-import com.library.entity.BorrowingRecord;
-import com.library.exception.ResourceNotFoundException;
 import com.library.service.BorrowingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

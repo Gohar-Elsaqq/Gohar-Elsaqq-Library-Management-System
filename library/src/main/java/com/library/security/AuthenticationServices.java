@@ -2,8 +2,9 @@ package com.library.security;
 
 import com.library.entity.AppUser;
 import com.library.entity.TokenInfo;
+import com.library.response.SuccessResponse;
 import com.library.service.TokenInfoServices;
-import jakarta.persistence.Access;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,20 +28,36 @@ public class AuthenticationServices {
     private HttpServletRequest httpRequest;
     @Autowired
     private TokenInfoServices tokenInfoServices;
-    public JwtTokenResponse login(String userName,String password){
+    @Autowired
+    private JwtTokenUtils jwtTokenUtils;
+    public SuccessResponse<JwtTokenResponse> login(String userName, String password) throws Exception {
         log.info("Attempting to authenticate user: " + userName);
-        Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName,password));
-        log.info("valid username and password");
+
+        //Authentication using username password authentication code
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userName, password));
+
+        log.info("Valid username and password");
+
+        //Get user details after authentication
+
         AppUserDatiles appUserDatiles = (AppUserDatiles) authentication.getPrincipal();
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        TokenInfo tokenInfo= createLoginToken(userName,appUserDatiles.getId());
+        //Creation of token after validation
+        TokenInfo tokenInfo = createLoginToken(userName, appUserDatiles.getId());
 
+        //Check token validity
+        if (jwtTokenUtils.isTokenExpired(tokenInfo.getAccessToken())) {
+            throw new Exception("Access token has expired");
+        }
 
-        return JwtTokenResponse.builder()
-                .accessToken(tokenInfo.getAccessToken())
-                .refreshToken(tokenInfo.getRefreshToken())
-                .build();
+        //Return the result in the form of SuccessResponse
+        return new SuccessResponse<>("Authentication successful",
+                JwtTokenResponse.builder()
+                        .accessToken(tokenInfo.getAccessToken())
+                        .refreshToken(tokenInfo.getRefreshToken())
+                        .build());
     }
     public TokenInfo createLoginToken(String userName,Long userId ){
         String userAgent = httpRequest.getHeader(HttpHeaders.USER_AGENT);

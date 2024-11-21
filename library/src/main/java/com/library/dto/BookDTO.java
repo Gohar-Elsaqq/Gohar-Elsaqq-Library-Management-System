@@ -4,11 +4,13 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
-public class BookDTO {
+public class BookDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Long id;
 
     @NotNull(message = "Title is required")

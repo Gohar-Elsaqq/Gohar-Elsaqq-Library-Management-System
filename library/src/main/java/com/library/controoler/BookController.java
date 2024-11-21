@@ -2,6 +2,7 @@ package com.library.controoler;
 
 import com.library.dto.BookDTO;
 import com.library.entity.Book;
+import com.library.response.SuccessResponse;
 import com.library.service.BookService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class BookController {
         return ResponseEntity.ok(result);
     }
     @GetMapping
-    public ResponseEntity<?> getAllBooks() throws Exception {
+    public SuccessResponse<List<BookDTO>> getAllBooks() throws Exception {
         return bookService.getAllBooks();
     }
 

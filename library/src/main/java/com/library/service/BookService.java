@@ -8,6 +8,7 @@ import com.library.repository.BookRepository;
 import com.library.repository.BorrowingRecordRepository;
 import com.library.response.SuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class BookService {
     @Autowired
     private BorrowingRecordRepository borrowingRecordRepository;
     //add book
+    @CacheEvict(value = "saveBook", key = "#saveBook")
     public BookDTO saveBook(BookDTO bookDTO) {
         try {
             if (bookDTO.getId() != null) {
@@ -63,6 +65,7 @@ public class BookService {
         return null;
     }
     @Transactional
+    @Cacheable(value = "booksCache", key = "#id")
     public Optional<BookDTO> getBookById(Long id) {
         if (bookRepository.findById(id).isPresent()) {
             return bookRepository.findById(id)
@@ -71,7 +74,7 @@ public class BookService {
             throw new ResourceNotFoundException("Book with ID " + id + " not found.");
         }
     }
-
+    @CacheEvict(value = "booksCache", key = "#id")
     public String deleteBookById(Long id) throws Exception {
 
             if (bookRepository.existsById(id)) {
@@ -82,7 +85,8 @@ public class BookService {
                 throw new ResourceNotFoundException("Book with ID " + id + " not found.");
             }
     }
-    public ResponseEntity<?> getAllBooks() throws Exception {
+    @Cacheable(value = "getAllBooks", key = "#root.methodName")
+    public SuccessResponse<List<BookDTO>> getAllBooks() throws Exception {
         List<BookDTO> books = bookRepository.findAll()
                 .stream()
                 .map(bookMapper::toDTO)
@@ -90,10 +94,9 @@ public class BookService {
         if (books.isEmpty()) {
             throw new ResourceNotFoundException("Books not found.");
         }
-        SuccessResponse<List<BookDTO>> successResponse = new SuccessResponse<>(
+        return new SuccessResponse<>(
                 "Books return data.",
                 books
         );
-        return new ResponseEntity<>(successResponse, HttpStatus.OK);
     }
 }
