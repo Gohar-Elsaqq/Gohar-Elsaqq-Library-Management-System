@@ -4,7 +4,6 @@ import com.library.entity.AppUser;
 import com.library.entity.TokenInfo;
 import com.library.response.SuccessResponse;
 import com.library.service.TokenInfoServices;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.net.InetAddress;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -45,7 +43,6 @@ public class AuthenticationServices {
 
         AppUserDatiles appUserDatiles = (AppUserDatiles) authentication.getPrincipal();
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        List<GrantedAuthority> grantedAuthorities;
         String role = appUserDatiles.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()
